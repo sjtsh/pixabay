@@ -65,25 +65,10 @@ class _AnimatedListViewState extends State<AnimatedListView>
     super.dispose();
   }
 
-  late int lastLength =
-      (widget.listView.childrenDelegate as SliverChildListDelegate)
-          .children
-          .length;
-
-  (AnimationController, int)? getC(int length) {
-    AnimationController newController = start(1000);
-    (AnimationController, int)? returnable = (newController, lastLength);
-    Future.delayed(const Duration(milliseconds: 1000))
-        .then((value) => lastLength = length);
-    return returnable;
-  }
-
   @override
   Widget build(BuildContext context) {
     List<Widget> children =
         (widget.listView.childrenDelegate as SliverChildListDelegate).children;
-    (AnimationController, int)? controllerTemp;
-    if (lastLength != children.length) controllerTemp = getC(children.length);
     return ListView(
       scrollDirection: widget.listView.scrollDirection,
       controller: widget.listView.controller,
@@ -116,9 +101,9 @@ class _AnimatedListViewState extends State<AnimatedListView>
             height: 200,
             child: Row(
               children: [
-                buildItem(children, i, controllerTemp),
+                buildItem(children, i, _animationController),
                 SpaceConstants.space,
-                buildItem(children, i + 1, controllerTemp),
+                buildItem(children, i + 1, _animationController),
               ],
             ),
           ),
@@ -129,18 +114,14 @@ class _AnimatedListViewState extends State<AnimatedListView>
   }
 
   Widget buildItem(List<Widget> children, int index,
-      (AnimationController, int)? controllerTemp) {
+      AnimationController controller) {
     if (index >= children.length) return Expanded(child: Container());
     if (children[index] is Shimmer) return Expanded(child: children[index]);
-    int meIndex = index;
-    if (controllerTemp != null) {
-      meIndex = meIndex -= controllerTemp.$2;
-    }
     return Expanded(
       child: AnimatedListItem(
         index: index,
         length: children.length,
-        aniController: figureController(controllerTemp, index),
+        aniController: controller,
         animationType: AnimationType.zoomIn,
         startX: 40,
         startY: 40,
@@ -149,10 +130,4 @@ class _AnimatedListViewState extends State<AnimatedListView>
     );
   }
 
-  AnimationController figureController(
-      (AnimationController, int)? controllerTemp, int index) {
-    if (controllerTemp == null) return _animationController;
-    if (index < controllerTemp.$2) return _animationController;
-    return controllerTemp.$1;
-  }
 }
