@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:pixabay/SearchImage/State/DataManagement.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 Random rand = Random(DateTime.now().millisecond);
@@ -13,8 +15,7 @@ class SkeletonBuilder extends StatelessWidget {
   final Widget? skeleton;
   final bool ownShimmer;
 
-
-  const SkeletonBuilder(
+   SkeletonBuilder(
       {super.key,
       required this.f,
       required this.should,
@@ -33,6 +34,7 @@ class SkeletonBuilder extends StatelessWidget {
   Widget loader() => const Center(
       child:
           SizedBox(height: 20, width: 20, child: CircularProgressIndicator()));
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +55,8 @@ class SkeletonBuilder extends StatelessWidget {
               child: this.skeleton!);
     }
     return FutureBuilder(
-        future: f,
+        key: context.read<DataManagement>().key,
+        future: fu(),
         builder: (BuildContext context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) return child();
           if (!snapshot.hasError) return skeleton ?? loader();

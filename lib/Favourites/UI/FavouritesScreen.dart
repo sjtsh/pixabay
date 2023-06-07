@@ -25,14 +25,16 @@ class FavouritesScreen extends StatelessWidget {
                   onPressed: () => Navigator.pop(context),
                   icon: const Icon(Icons.arrow_back_ios))),
           Expanded(
-              child: FeedScreen(
-                  ctx
-                      .watch<FavouritesManagement>()
-                      .favourites
-                      .toList()
-                      .map((e) => SingularFeedImage(e))
-                      .toList(),
-                  () async {}))
+              child: ctx.watch<FavouritesManagement>().favourites.isEmpty
+                  ? const Center(child: Text("No favourites yet"))
+                  : FeedScreen(
+                      ctx
+                          .watch<FavouritesManagement>()
+                          .favourites
+                          .toList()
+                          .map((e) => SingularFeedImage(e))
+                          .toList(),
+                      () async {}))
         ],
       ),
     );

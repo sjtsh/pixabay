@@ -21,6 +21,7 @@ class FeedWithSkeleton extends StatefulWidget {
 }
 
 class _FeedWithSkeletonState extends State<FeedWithSkeleton> {
+
   @override
   Widget build(BuildContext context) {
     return SkeletonBuilder(

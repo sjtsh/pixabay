@@ -57,6 +57,7 @@ class SingularFeedImage extends StatelessWidget {
                   Positioned.fill(
                       child: StaticService.cache(image.url, constraints)),
                   LikeOnDoubleClick(
+                      key: UniqueKey(),
                       () => fav(context),
                       context.read<FavouritesManagement>().contains(image),
                       flareControls)

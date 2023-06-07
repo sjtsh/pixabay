@@ -10,6 +10,7 @@ import '../Entities/ImageObj.dart';
 class DataManagement with ChangeNotifier {
   List<ImageObj> images = [];
   LazyLoadController lazyController = LazyLoadController(initialCount: 10);
+  UniqueKey key = UniqueKey();
 
   TextEditingController searchController = TextEditingController();
   Future myFuture = Future.delayed(const Duration(seconds: 10));
@@ -35,8 +36,8 @@ class DataManagement with ChangeNotifier {
     myFuture = ctx
         .read<DataManagement>()
         .homeFunction(ctx, text: searchController.text)();
+    key = UniqueKey();
     lazyController.appendCount = 10;
-    notifyListeners();
     await myFuture;
     notifyListeners();
   }
